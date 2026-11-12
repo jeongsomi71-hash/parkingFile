@@ -12,7 +12,7 @@
   <style>
     :root {
       --bg: #090D16;
-      --card-bg: rgba(22, 30, 49, 0.82);
+      --card-bg: rgba(22, 30, 49, 0.85);
       --card-border: rgba(56, 189, 248, 0.22);
       --primary: #0284C7;
       --primary-hover: #0369A1;
@@ -20,12 +20,15 @@
       --text: #F8FAFC;
       --text-muted: #94A3B8;
       --badge-bg: rgba(56, 189, 248, 0.14);
-      --step-bg: rgba(15, 23, 42, 0.7);
+      --step-bg: rgba(15, 23, 42, 0.72);
       --step-border: rgba(148, 163, 184, 0.16);
       --success: #10B981;
       --warning-bg: rgba(245, 158, 11, 0.12);
       --warning-border: rgba(245, 158, 11, 0.35);
       --warning-text: #FDE68A;
+      --error-bg: rgba(239, 68, 68, 0.15);
+      --error-border: rgba(239, 68, 68, 0.4);
+      --error-text: #FCA5A5;
     }
 
     * {
@@ -57,6 +60,95 @@
       display: flex;
       flex-direction: column;
       gap: 20px;
+    }
+
+    /* Auth Gate Screen */
+    #authGate {
+      width: 100%;
+      max-width: 420px;
+      margin-top: 40px;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .auth-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: 26px;
+      padding: 32px 24px 28px;
+      text-align: center;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .auth-icon {
+      width: 76px;
+      height: 76px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 8px 20px rgba(2, 132, 199, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .code-input {
+      width: 100%;
+      padding: 16px 12px;
+      background: rgba(15, 23, 42, 0.88);
+      border: 2px solid rgba(56, 189, 248, 0.4);
+      border-radius: 14px;
+      color: #FFFFFF;
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: 10px;
+      text-align: center;
+      margin: 18px 0 8px;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .code-input:focus {
+      border-color: #38BDF8;
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.4);
+    }
+
+    .code-input::placeholder {
+      font-size: 14px;
+      letter-spacing: normal;
+      color: #64748B;
+      font-weight: 500;
+    }
+
+    .auth-error {
+      background: var(--error-bg);
+      border: 1px solid var(--error-border);
+      color: var(--error-text);
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 12.5px;
+      font-weight: 600;
+      margin-top: 10px;
+      display: none;
+      animation: shake 0.35s ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+
+    /* Main Download Content */
+    #mainContent {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     /* Main Hero Card */
@@ -137,7 +229,7 @@
       font-weight: 600;
     }
 
-    /* CTA Button */
+    /* Buttons */
     .btn-download {
       display: flex;
       align-items: center;
@@ -223,6 +315,10 @@
       margin-top: 1px;
     }
 
+    .step-content {
+      flex: 1;
+    }
+
     .step-content h4 {
       font-size: 13.5px;
       font-weight: 700;
@@ -243,6 +339,115 @@
       padding: 1px 6px;
       border-radius: 4px;
       font-weight: 700;
+    }
+
+    /* Toggle Detail Button */
+    .btn-toggle-detail {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 10px;
+      background: rgba(2, 132, 199, 0.16);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #38BDF8;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 7px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .btn-toggle-detail:hover {
+      background: rgba(2, 132, 199, 0.28);
+    }
+
+    .btn-toggle-detail svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+      transition: transform 0.2s ease;
+    }
+
+    .btn-toggle-detail.open svg {
+      transform: rotate(180deg);
+    }
+
+    /* Detailed Play Protect Photo Guide */
+    .detail-guide-container {
+      margin-top: 12px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      border-radius: 16px;
+      padding: 16px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .detail-guide-header h5 {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #38BDF8;
+      margin-bottom: 2px;
+    }
+
+    .detail-guide-header p {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .photo-step {
+      background: rgba(30, 41, 59, 0.55);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 12px 10px;
+    }
+
+    .photo-step-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-size: 12px;
+      color: #E2E8F0;
+    }
+
+    .photo-badge {
+      background: var(--primary);
+      color: #FFFFFF;
+      font-size: 10.5px;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 6px;
+    }
+
+    .photo-wrapper {
+      width: 100%;
+      max-width: 290px;
+      margin: 0 auto;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+    }
+
+    .photo-wrapper img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .photo-tip {
+      font-size: 11px;
+      color: #10B981;
+      text-align: center;
+      margin-top: 8px;
+      font-weight: 600;
     }
 
     /* Important Alert Box */
@@ -303,148 +508,325 @@
       line-height: 1.35;
     }
 
-    /* Notice Card */
-    .notice-card {
-      background: rgba(30, 41, 59, 0.5);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 14px;
-      padding: 14px;
-      text-align: center;
-      font-size: 12px;
-      color: #94A3B8;
-    }
-
-    .notice-card strong {
-      color: #E2E8F0;
-    }
-
+    /* Footer */
     footer {
       text-align: center;
       font-size: 11px;
       color: #64748B;
       margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .reauth-link {
+      color: #0284C7;
+      text-decoration: underline;
+      cursor: pointer;
+      font-size: 11px;
     }
   </style>
 </head>
 <body>
 
   <div class="container">
-    
-    <!-- Hero Download Card -->
-    <div class="hero-card">
-      <img src="app-icon.png" alt="스마트 주차 앱 아이콘" class="app-icon">
-      
-      <div>
+
+    <!-- 1. Resident Access Code Gate -->
+    <div id="authGate">
+      <div class="auth-card">
+        <img src="app-icon.png" alt="스마트 주차 아이콘" class="auth-icon">
         <div class="badge-pill">
           <span class="badge-pulse"></span>
-          <span>주차위치 찾기 v2.4 최신 릴리즈</span>
+          <span>입주민 전용 인증</span>
         </div>
-      </div>
+        <h1>접속 코드 입력</h1>
+        <p class="tagline">스마트 주차 앱을 다운로드하려면<br>안내받으신 입주민 접속 코드 6자리를 입력해 주세요.</p>
 
-      <h1>스마트 주차 위치 알림</h1>
-      <p class="tagline">단지 입주민을 위한 지하주차장 층수 및<br>출입문 체감 거리 자동 안내 앱</p>
+        <form id="authForm" onsubmit="handleAuthSubmit(event)">
+          <input 
+            type="password" 
+            id="codeInput" 
+            class="code-input" 
+            maxlength="6" 
+            inputmode="numeric" 
+            pattern="[0-9]*" 
+            placeholder="접속 코드 6자리" 
+            autocomplete="off"
+            autofocus
+          >
+          <div id="authError" class="auth-error">접속 코드가 올바르지 않습니다. 다시 입력해 주세요.</div>
 
-      <div class="spec-row">
-        <span class="spec-item">📁 parking-app.apk</span>
-        <span class="spec-item">⚡ 1.6 MB</span>
-        <span class="spec-item">🤖 Android 10 이상</span>
-      </div>
+          <button type="submit" class="btn-download" style="margin-top: 14px;">
+            <span>입주민 인증 및 입장</span>
+          </button>
+        </form>
 
-      <!-- Main Direct Download CTA -->
-      <a href="https://github.com/jeongsomi71-hash/parkingFile/raw/main/parking-app.apk" download="parking-app.apk" class="btn-download" id="downloadBtn">
-        <svg viewBox="0 0 24 24">
-          <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/>
-        </svg>
-        <span>앱 다운로드 (최신 APK)</span>
-      </a>
-
-      <div class="safe-badge">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="#10B981">
-          <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
-        </svg>
-        <span>자체 빌드 보안 및 무결성 검증 완료</span>
+        <p style="font-size: 11.5px; color: #64748B; margin-top: 14px;">
+          ※ 입주민 안내 문자 또는 관리팀 공지 코드를 입력하세요.
+        </p>
       </div>
     </div>
+    
+    <!-- 2. Main Download & Guide Page (Protected) -->
+    <div id="mainContent" style="display: none;">
+      
+      <!-- Hero Download Card -->
+      <div class="hero-card">
+        <img src="app-icon.png" alt="스마트 주차 앱 아이콘" class="app-icon">
+        
+        <div>
+          <div class="badge-pill">
+            <span class="badge-pulse"></span>
+            <span>주차위치 찾기 v2.4 최신 릴리즈</span>
+          </div>
+        </div>
 
-    <!-- Step by Step Install Guide -->
-    <div class="section-card">
-      <div class="section-title">
-        <span>📲 설치 방법 안내 (간단 3단계)</span>
-      </div>
+        <h1>스마트 주차 위치 알림</h1>
+        <p class="tagline">단지 입주민을 위한 지하주차장 층수 및<br>출입문 체감 거리 자동 안내 앱</p>
 
-      <div class="guide-step">
-        <div class="step-num">1</div>
-        <div class="step-content">
-          <h4>다운로드 경고창 발생 시</h4>
-          <p>브라우저에서 <em>"유해한 파일일 수 있음"</em> 창이 뜨면 <span class="highlight-btn">무시하고 다운로드</span>를 눌러주세요.</p>
+        <div class="spec-row">
+          <span class="spec-item">📁 parking-app.apk</span>
+          <span class="spec-item">⚡ 1.6 MB</span>
+          <span class="spec-item">🤖 Android 10 이상</span>
+        </div>
+
+        <!-- Main Direct Download CTA -->
+        <a href="https://github.com/jeongsomi71-hash/parkingFile/raw/main/parking-app.apk" download="parking-app.apk" class="btn-download" id="downloadBtn">
+          <svg viewBox="0 0 24 24">
+            <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/>
+          </svg>
+          <span>앱 다운로드 (최신 APK)</span>
+        </a>
+
+        <div class="safe-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#10B981">
+            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
+          </svg>
+          <span>자체 빌드 보안 및 무결성 검증 완료</span>
         </div>
       </div>
 
-      <div class="guide-step">
-        <div class="step-num">2</div>
-        <div class="step-content">
-          <h4>다운로드 완료 후 파일 열기</h4>
-          <p>화면 상단 알림창의 <em>"parking-app.apk"</em> 또는 브라우저의 <span class="highlight-btn">열기</span>를 터치합니다.</p>
+      <!-- Step by Step Install Guide -->
+      <div class="section-card">
+        <div class="section-title">
+          <span>📲 설치 방법 안내 (간단 3단계)</span>
+        </div>
+
+        <div class="guide-step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h4>다운로드 경고창 발생 시</h4>
+            <p>브라우저에서 <em>"유해한 파일일 수 있음"</em> 창이 뜨면 <span class="highlight-btn">무시하고 다운로드</span>를 눌러주세요.</p>
+          </div>
+        </div>
+
+        <div class="guide-step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h4>다운로드 완료 후 파일 열기</h4>
+            <p>화면 상단 알림창의 <em>"parking-app.apk"</em> 또는 브라우저의 <span class="highlight-btn">열기</span>를 터치합니다.</p>
+          </div>
+        </div>
+
+        <div class="guide-step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h4>Play 프로텍트 차단 창 발생 시</h4>
+            <p><span class="highlight-btn">세부정보 더보기</span>를 누른 후 <span class="highlight-btn">무시하고 설치</span>를 누르면 정상 설치됩니다.</p>
+            
+            <!-- Detailed Guide Toggle Button -->
+            <button type="button" class="btn-toggle-detail" id="toggleGuideBtn" onclick="togglePlayProtectGuide()">
+              <span id="toggleGuideText">📸 Play 프로텍트 해제 상세 사진 가이드 보기</span>
+              <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+            </button>
+
+            <!-- Detailed Photo Walkthrough (6 Steps) -->
+            <div id="playProtectDetail" class="detail-guide-container" style="display: none;">
+              <div class="detail-guide-header">
+                <h5>💡 Play 프로텍트 일시 정지 순서 (총 6단계)</h5>
+                <p>차단이 풀리지 않을 경우 Play 스토어에서 앱 검사를 1분간 잠시 끄시면 즉시 설치됩니다.</p>
+              </div>
+
+              <div class="photo-step">
+                <div class="photo-step-header">
+                  <span class="photo-badge">Step 1</span>
+                  <span>Play 스토어 앱 실행 후 우측 상단 <strong>[프로필 아이콘]</strong> 터치</span>
+                </div>
+                <div class="photo-wrapper">
+                  <img src="guide/guide_step1.jpg" alt="Play 스토어 프로필 선택" loading="lazy">
+                </div>
+              </div>
+
+              <div class="photo-step">
+                <div class="photo-step-header">
+                  <span class="photo-badge">Step 2</span>
+                  <span>계정 메뉴에서 <strong>[Play 프로텍트]</strong> 항목 선택</span>
+                </div>
+                <div class="photo-wrapper">
+                  <img src="guide/guide_step2.png" alt="Play 프로텍트 선택" loading="lazy">
+                </div>
+              </div>
+
+              <div class="photo-step">
+                <div class="photo-step-header">
+                  <span class="photo-badge">Step 3</span>
+                  <span>우측 상단 <strong>[설정(톱니바퀴 ⚙️)]</strong> 아이콘 터치</span>
+                </div>
+                <div class="photo-wrapper">
+                  <img src="guide/guide_step3.png" alt="설정 아이콘 터치" loading="lazy">
+                </div>
+              </div>
+
+              <div class="photo-step">
+                <div class="photo-step-header">
+                  <span class="photo-badge">Step 4</span>
+                  <span><strong>[Play 프로텍트로 앱 검사]</strong> 스위치 끄기</span>
+                </div>
+                <div class="photo-wrapper">
+                  <img src="guide/guide_step4.png" alt="앱 검사 스위치 끄기" loading="lazy">
+                </div>
+              </div>
+
+              <div class="photo-step">
+                <div class="photo-step-header">
+                  <span class="photo-badge">Step 5</span>
+                  <span>확인 팝업에서 <strong>[일시중지]</strong> 터치</span>
+                </div>
+                <div class="photo-wrapper">
+                  <img src="guide/guide_step5.png" alt="일시중지 선택" loading="lazy">
+                </div>
+              </div>
+
+              <div class="photo-step">
+                <div class="photo-step-header">
+                  <span class="photo-badge">Step 6</span>
+                  <span>스위치가 꺼진 것 확인 후 <strong>앱 설치 완료!</strong></span>
+                </div>
+                <div class="photo-wrapper">
+                  <img src="guide/guide_step6.png" alt="설정 해제 확인" loading="lazy">
+                </div>
+                <p class="photo-tip">※ 내일 자동으로 다시 켜지므로 별도로 다시 켜지 않으셔도 안전합니다.</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="alert-box">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+          </svg>
+          <p><strong>안심하세요:</strong> 구글 플레이스토어를 거치지 않고 웹에서 직접 배포되는 모든 앱에 대해 안드로이드 OS가 기본 표시하는 보안 확인 안내입니다.</p>
         </div>
       </div>
 
-      <div class="guide-step">
-        <div class="step-num">3</div>
-        <div class="step-content">
-          <h4>Play 프로텍트 차단 창 발생 시</h4>
-          <p><span class="highlight-btn">세부정보 더보기</span>를 누른 후 <span class="highlight-btn">무시하고 설치</span>를 누르면 정상 설치됩니다.</p>
+      <!-- Features -->
+      <div class="section-card">
+        <div class="section-title">
+          <span>✨ 주요 기능</span>
+        </div>
+        <div class="features-list">
+          <div class="feature-item">
+            <div class="icon">🏢</div>
+            <div class="title">로비폰 자동 감지</div>
+            <div class="desc">101동 출입 시 B1~B3 층수 즉시 자동 판별</div>
+          </div>
+          <div class="feature-item">
+            <div class="icon">👟</div>
+            <div class="title">체감 거리 측정</div>
+            <div class="desc">가까움/중간/먼 편 및 10단위 올림 걸음 수 안내</div>
+          </div>
+          <div class="feature-item">
+            <div class="icon">🚗</div>
+            <div class="title">다차량 지원</div>
+            <div class="desc">4자리 번호 지정 또는 0000(전체 차량) 대응</div>
+          </div>
+          <div class="feature-item">
+            <div class="icon">🔋</div>
+            <div class="title">초절전 설계</div>
+            <div class="desc">입차 알림 감지 시에만 1~2분 스마트 스캔</div>
+          </div>
         </div>
       </div>
 
-      <div class="alert-box">
-        <svg viewBox="0 0 24 24">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
-        </svg>
-        <p><strong>안심하세요:</strong> 구글 플레이스토어를 거치지 않고 웹에서 직접 배포되는 모든 앱에 대해 안드로이드 OS가 기본 표시하는 보안 확인 안내입니다.</p>
-      </div>
+      <footer>
+        <span>&copy; 2026 하이리치 스마트 주차. All rights reserved.</span>
+        <span class="reauth-link" onclick="logoutResident()">🔒 접속 코드 다시 입력하기</span>
+      </footer>
+
     </div>
-
-    <!-- Features -->
-    <div class="section-card">
-      <div class="section-title">
-        <span>✨ 주요 기능</span>
-      </div>
-      <div class="features-list">
-        <div class="feature-item">
-          <div class="icon">🏢</div>
-          <div class="title">로비폰 자동 감지</div>
-          <div class="desc">101동 출입 시 B1~B3 층수 즉시 자동 판별</div>
-        </div>
-        <div class="feature-item">
-          <div class="icon">👟</div>
-          <div class="title">체감 거리 측정</div>
-          <div class="desc">가까움/중간/먼 편 및 10단위 올림 걸음 수 안내</div>
-        </div>
-        <div class="feature-item">
-          <div class="icon">🚗</div>
-          <div class="title">다차량 지원</div>
-          <div class="desc">4자리 번호 지정 또는 0000(전체 차량) 대응</div>
-        </div>
-        <div class="feature-item">
-          <div class="icon">🔋</div>
-          <div class="title">초절전 설계</div>
-          <div class="desc">입차 알림 감지 시에만 1~2분 스마트 스캔</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Official Notice -->
-    <div class="notice-card">
-      <p>📢 <strong>공지사항</strong></p>
-      <p style="margin-top: 4px;">현재 101동 정상 동작 중이며, 102동, 103동, 104동은 순차적으로 등록 진행 예정입니다.</p>
-      <p style="margin-top: 6px; font-weight: 700; color: #38BDF8;">- 하이리치 스마트 주차 관리팀 -</p>
-    </div>
-
-    <footer>
-      &copy; 2026 하이리치 스마트 주차. All rights reserved.
-    </footer>
 
   </div>
+
+  <script>
+    const VALID_CODE = "124124";
+    const STORAGE_KEY = "smartparking_resident_auth";
+
+    // Check existing auth state on page load
+    window.addEventListener("DOMContentLoaded", () => {
+      const isAuth = sessionStorage.getItem(STORAGE_KEY);
+      if (isAuth === "true") {
+        showMainContent();
+      } else {
+        showAuthGate();
+      }
+    });
+
+    function showAuthGate() {
+      document.getElementById("authGate").style.display = "block";
+      document.getElementById("mainContent").style.display = "none";
+      const input = document.getElementById("codeInput");
+      if (input) {
+        input.value = "";
+        input.focus();
+      }
+    }
+
+    function showMainContent() {
+      document.getElementById("authGate").style.display = "none";
+      document.getElementById("mainContent").style.display = "flex";
+    }
+
+    function handleAuthSubmit(e) {
+      if (e) e.preventDefault();
+      const input = document.getElementById("codeInput");
+      const errorDiv = document.getElementById("authError");
+      const val = (input.value || "").trim();
+
+      if (val === VALID_CODE) {
+        errorDiv.style.display = "none";
+        sessionStorage.setItem(STORAGE_KEY, "true");
+        showMainContent();
+      } else {
+        errorDiv.style.display = "block";
+        input.classList.remove("error-shake");
+        void input.offsetWidth; // trigger reflow
+        input.focus();
+      }
+    }
+
+    function logoutResident() {
+      sessionStorage.removeItem(STORAGE_KEY);
+      showAuthGate();
+    }
+
+    function togglePlayProtectGuide() {
+      const detail = document.getElementById("playProtectDetail");
+      const btn = document.getElementById("toggleGuideBtn");
+      const text = document.getElementById("toggleGuideText");
+
+      if (detail.style.display === "none" || detail.style.display === "") {
+        detail.style.display = "flex";
+        btn.classList.add("open");
+        text.innerText = "▲ Play 프로텍트 사진 가이드 접기";
+      } else {
+        detail.style.display = "none";
+        btn.classList.remove("open");
+        text.innerText = "📸 Play 프로텍트 해제 상세 사진 가이드 보기";
+      }
+    }
+  </script>
 
 </body>
 </html>
